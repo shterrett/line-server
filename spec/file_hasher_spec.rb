@@ -4,11 +4,7 @@ describe FileHasher do
   let(:tmp_dir) { DATA_PATH.join('tmp') }
 
   after do
-    Dir.new(tmp_dir).entries.each do |entry|
-      if File.file?(tmp_dir.join(entry))
-        File.delete(tmp_dir.join(entry))
-      end
-    end
+    clean_tmp_folder(tmp_dir)
   end
 
   it 'splits the file based on the passed-in line count' do
@@ -41,5 +37,20 @@ describe FileHasher do
     end
 
     expect(File.readlines(tmp_dir.join('20.txt')).length).to eq 4
+  end
+
+  it 'closes the original file when done' do
+    path = DATA_PATH.join('full_file_24.txt')
+
+    file = File.open(path)
+    allow(File).to receive(:open).and_return(file)
+
+    expect(file).to receive(:close)
+
+    FileHasher.new(file: path,
+                   target: tmp_dir,
+                   line_max: 5
+                  )
+              .hash_file
   end
 end

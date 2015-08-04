@@ -11,6 +11,7 @@ class FileHasher
       write_partial_file(lines)
       @name += line_max
     end
+    file_object.close
   end
 
   private
@@ -29,6 +30,10 @@ class FileHasher
   end
 
   def file_enumerator
-    @enumerator ||= File.open(file, 'r').each_line
+    @enumerator ||= file_object.each_line
+  end
+
+  def file_object
+    @file_object ||= File.open(file, 'r')
   end
 end
