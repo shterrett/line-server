@@ -5,15 +5,22 @@ class LineFinder
   end
 
   def find(line_number)
-    lines = enum_file(line_number)
-    skip_lines(line_number).times { lines.next }
-    line = lines.peek
+    line = scan_to_line(enum_file(line_number), line_number)
     cleanup_file
     line
   end
 
   private
   attr_reader :directory, :file, :line_max
+
+  def scan_to_line(lines, line_number)
+    begin
+      skip_lines(line_number).times { lines.next }
+      line = lines.peek
+    rescue StopIteration
+      line = nil
+    end
+  end
 
   def skip_lines(line_number)
     line_number - file_index(line_number)
@@ -28,11 +35,22 @@ class LineFinder
   end
 
   def enum_file(line_number)
-    @file = File.open(filename(line_number))
-    @file.each_line
+    if file = hashed_file(line_number)
+      file.each_line
+    else
+      [].to_enum
+    end
+  end
+
+  def hashed_file(line_number)
+    @file = if File.file?(filename(line_number))
+              File.open(filename(line_number))
+            end
   end
 
   def cleanup_file
-    file.close
+    if file
+      file.close
+    end
   end
 end

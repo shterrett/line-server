@@ -1,6 +1,7 @@
 require 'pry'
 require 'rspec'
 require 'simplecov'
+require 'rack/test'
 
 SimpleCov.start do
   add_filter 'spec/'

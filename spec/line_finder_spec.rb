@@ -40,6 +40,24 @@ describe LineFinder do
     end
   end
 
+  it 'returns nil if the line_number is greater than the lines in the file, but
+      would fit in the last (partial) hash file' do
+    finder = LineFinder.new(tmp_dir, line_max)
+
+    line = finder.find(37)
+
+    expect(line).to be_nil
+  end
+
+  it 'returns nil if the line_number is greater than the lines in the file, and
+      would be hashed in a file greater than the highest existing file' do
+    finder = LineFinder.new(tmp_dir, line_max)
+
+    line = finder.find(10000)
+
+    expect(line).to be_nil
+  end
+
   it 'closes the file when finished' do
     file = File.open("#{tmp_dir}/0.txt")
     allow(File).to receive(:open).and_return(file)

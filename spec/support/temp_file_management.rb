@@ -15,7 +15,7 @@ module TempFileManagement
     (0..complete_files).map { |n| n * line_max }.each do |start|
       File.open("#{tmp_dir}/#{start}.txt", 'w') do |f|
         (0...line_max).each do |line|
-          f.puts file_line(start, line, line_max)
+          f.puts file_line(start, line)
         end
       end
     end
@@ -23,13 +23,13 @@ module TempFileManagement
     if partial_file_lines > 0
       File.open("#{tmp_dir}/#{line_max * (complete_files + 1)}.txt", 'w') do |f|
         (0...partial_file_lines).each do |line|
-          f.puts file_line(line_max * (complete_files + 1), line, line_max)
+          f.puts file_line(line_max * (complete_files + 1), line)
         end
       end
     end
   end
 
-  def file_line(start, line, line_max)
+  def file_line(start, line)
     "file #{start}; line #{line}; total #{start + line}"
   end
 end
