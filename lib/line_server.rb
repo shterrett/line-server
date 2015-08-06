@@ -1,4 +1,6 @@
+require_relative 'line_server/directory_cleaner'
 require_relative 'line_server/configuration'
+require_relative 'line_server/line_max_calculator'
 require_relative 'line_server/file_hasher'
 require_relative 'line_server/line_finder'
 require_relative 'line_server/line_request'

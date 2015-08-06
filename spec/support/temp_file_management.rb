@@ -1,10 +1,6 @@
 module TempFileManagement
   def clean_tmp_folder(tmp_dir)
-    Dir.new(tmp_dir).entries.each do |entry|
-      if File.file?(tmp_dir.join(entry))
-        File.delete(tmp_dir.join(entry))
-      end
-    end
+    DirectoryCleaner.new(tmp_dir).clean
   end
 
   def create_searchable_files(tmp_dir:,
